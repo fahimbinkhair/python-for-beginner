@@ -1,26 +1,7 @@
 #!/usr/bin/python3
-import mysql.connector
-from mysql.connector import errorcode
+from lib import DB
 from datetime import datetime
-
-# connect to mysql
-try:
-    dbConn = mysql.connector.connect(
-        host="localhost",
-        user="root",
-        passwd="password",
-        database="hello_python"
-    )
-
-    dbCursor = dbConn.cursor(prepared=True)
-except mysql.connector.Error as err:
-    if err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
-        print("Something is wrong with your user name or password")
-    elif err.errno == errorcode.ER_BAD_DB_ERROR:
-        print("Database does not exist")
-    else:
-        print(err)
-        exit()
+db_conn = DB.DbConn()
 
 sql = """ INSERT INTO student
             (name, address_line_1, address_line_2, postcode, when_created)
@@ -38,11 +19,9 @@ for line in lines:
     addressLine1 = lineData[1]
     addressLine2 = lineData[2]
     postCode = lineData[3]
-    print(name + ' - ' + addressLine1 + ' - ' + addressLine2 + ' - ' + postCode + ' - ' + str(datetime.now()))
+    print('Saving: ' + name)
 
     sqlValue = (name, addressLine1, addressLine2, postCode, datetime.now())
-    dbCursor.execute(sql, sqlValue)
+    db_conn.get_cursor().execute(sql, sqlValue)
 
-dbCursor.close()
-dbConn.commit()
-dbConn.close()
+db_conn.commit().close_cursor().close_db_connection()
