@@ -20,5 +20,3 @@ This is a simple application to read data from a text file then save them into a
   `when_created` datetime(6) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1`
-
-This is test
